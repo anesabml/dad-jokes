@@ -2,7 +2,6 @@ plugins {
     id("com.android.application")
     kotlin("android")
     id("kotlin-android-extensions")
-//    id("com.apollographql.apollo")
 //    id("androidx.navigation.safeargs.kotlin")
 }
 
@@ -74,11 +73,9 @@ dependencies {
     implementation(Libraries.KOTLIN_COROUTINES_ANDROID)
     implementation(Libraries.OKHTTP)
     implementation(Libraries.OKHTTP_LOGGING_INTERCEPTOR)
-    implementation(Libraries.APOLLO_RUNTIME)
-    implementation(Libraries.APOLLO_COROUTINES)
-    implementation(Libraries.APOLLO_NORMALIZED_CASH)
-    implementation(Libraries.APOLLO_ANDROID_SUPPORT)
-    implementation(Libraries.PAGING)
+    implementation(Libraries.RETROFIT)
+    implementation(Libraries.RETROFIT_MOSHI_CONVERTER)
+    implementation(Libraries.RETROFIT_COROUTINES_ADAPTER)
     implementation(Libraries.TIMBER)
     implementation(Libraries.WORK_MANAGER)
 
