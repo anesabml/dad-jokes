@@ -16,16 +16,14 @@ object Versions {
     const val LEGACY_SUPPORT = "1.0.0"
     const val MATERIAL = "1.2.0-alpha05"
     const val BROWSER = "1.0.0"
-    const val KOTLIN_COROUTINES = "1.3.6"
-    const val APOLLO_GRAPHQL = "2.0.0"
+    const val KOTLIN_COROUTINES = "1.3.8"
+    const val ROOM = "2.2.5"
     const val COIL = "0.10.0"
     const val ESPRESSO_CORE = "3.2.0"
     const val JUNIT = "4.13"
     const val KTLINT = "0.37.2"
     const val LIFECYCLE = "2.3.0-alpha02"
     const val NAVIGATION = "2.3.0-alpha04"
-    const val DAGGER_HILT = "2.28-alpha"
-    const val DAGGER_HILT_JETPACK = "1.0.0-alpha01"
     const val OKHTTP = "4.3.1"
     const val RETROFIT = "2.7.1"
     const val RETROFIT_COROUTINES = "0.9.2"
@@ -36,7 +34,6 @@ object Versions {
     const val MOCKK = "1.10.0"
     const val TRUTH = "1.0.1"
     const val ANDROIDX_ARCH_CORE = "2.1.0"
-    const val WORK_MANAGER = "2.3.3"
 }
 
 object BuildPluginsVersion {
@@ -44,7 +41,6 @@ object BuildPluginsVersion {
     const val KOTLIN = "1.3.72"
     const val KTLINT = "9.3.0"
     const val DETEKT = "1.10.0"
-    const val VERSIONS_PLUGIN = "0.28.0"
 }
 
 object SupportLibs {
@@ -68,21 +64,15 @@ object Libraries {
     const val LIFECYCLE_LIVEDATA = "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.LIFECYCLE}"
     const val LIFECYCLE_VIEWMODEL_SAVEDSTATE =
         "androidx.lifecycle:lifecycle-viewmodel-savedstate:${Versions.LIFECYCLE}"
-    const val LIFECYCLE_COMMON_JAVA_8 =
-        "androidx.lifecycle:lifecycle-common-java8:${Versions.LIFECYCLE}"
 
     const val KOTLIN_COROUTINES_CORE =
         "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.KOTLIN_COROUTINES}"
     const val KOTLIN_COROUTINES_ANDROID =
         "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.KOTLIN_COROUTINES}"
 
-    const val APOLLO_RUNTIME = "com.apollographql.apollo:apollo-runtime:${Versions.APOLLO_GRAPHQL}"
-    const val APOLLO_COROUTINES =
-        "com.apollographql.apollo:apollo-coroutines-support:${Versions.APOLLO_GRAPHQL}"
-    const val APOLLO_NORMALIZED_CASH =
-        "com.apollographql.apollo:apollo-normalized-cache-sqlite:${Versions.APOLLO_GRAPHQL}"
-    const val APOLLO_ANDROID_SUPPORT =
-        "com.apollographql.apollo:apollo-android-support:${Versions.APOLLO_GRAPHQL}"
+    const val ROOM_KTX = "androidx.room:room-ktx:${Versions.ROOM}"
+    const val ROOM_RUNTIME = "androidx.room:room-runtime:${Versions.ROOM}"
+    const val ROOM_COMPILER = "androidx.room:room-compiler:${Versions.ROOM}"
 
     const val COIL = "io.coil-kt:coil:${Versions.COIL}"
 
@@ -91,15 +81,6 @@ object Libraries {
     const val NAVIGATION_UI = "androidx.navigation:navigation-ui-ktx:${Versions.NAVIGATION}"
     const val NAVIGATION_SAFE_ARGS =
         "androidx.navigation:navigation-safe-args-gradle-plugin:${Versions.NAVIGATION}"
-
-    const val DAGGER_HILT = "com.google.dagger:hilt-android:${Versions.DAGGER_HILT}"
-    const val DAGGER_HILT_COMPLIER =
-        "com.google.dagger:hilt-android-compiler:${Versions.DAGGER_HILT}"
-    const val DAGGER_HILT_VIEWMODEL =
-        "androidx.hilt:hilt-lifecycle-viewmodel:${Versions.DAGGER_HILT_JETPACK}"
-    const val DAGGER_HILT_WORKMANGER = "androidx.hilt:hilt-work:${Versions.DAGGER_HILT_JETPACK}"
-    const val DAGGER_HILT_JETPACK_COMPLIER =
-        "androidx.hilt:hilt-compiler:${Versions.DAGGER_HILT_JETPACK}"
 
     const val OKHTTP = "com.squareup.okhttp3:okhttp:${Versions.OKHTTP}"
     const val OKHTTP_LOGGING_INTERCEPTOR =
@@ -111,16 +92,9 @@ object Libraries {
     const val RETROFIT_COROUTINES_ADAPTER =
         "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:${Versions.RETROFIT_COROUTINES}"
 
-    const val MOSHI = "com.squareup.moshi:moshi:${Versions.MOSHI}"
-    const val MOSHI_CODEGEN = "com.squareup.moshi:moshi-kotlin-codegen:${Versions.MOSHI}"
-
-    const val PAGING = "androidx.paging:paging-runtime:${Versions.PAGING}"
-
     const val TIMBER = "com.jakewharton.timber:timber:${Versions.TIMBER}"
 
     const val CIRCLE_IMAGE_VIEW = "de.hdodenhof:circleimageview:${Versions.CIRCLE_IMAGE}"
-
-    const val WORK_MANAGER = "androidx.work:work-runtime-ktx:${Versions.WORK_MANAGER}"
 }
 
 object TestingLib {
@@ -141,12 +115,7 @@ object AndroidTestingLib {
     const val ANDROIDX_TEST_RUNNER = "androidx.test:runner:${Versions.ANDROIDX_TEST}"
     const val ANDROIDX_TEST_EXT_JUNIT = "androidx.test.ext:junit-ktx:${Versions.ANDROIDX_TEST_EXT}"
     const val ESPRESSO_CORE = "androidx.test.espresso:espresso-core:${Versions.ESPRESSO_CORE}"
-    const val WORK_MANAGER = "androidx.work:work-testing:${Versions.WORK_MANAGER}"
 
     // Test helpers for LiveData
     const val ANDROIDX_ARCH_CORE = "androidx.arch.core:core-testing:${Versions.ANDROIDX_ARCH_CORE}"
-
-    const val DAGGER_HILT = "com.google.dagger:hilt-android-testing:${Versions.DAGGER_HILT}"
-    const val DAGGER_HILT_COMPLIER = "com.google.dagger:hilt-android-compiler:${Versions.DAGGER_HILT}"
-    const val DAGGER_HILT_JETPACK_COMPLIER = "androidx.hilt:hilt-compiler:${Versions.DAGGER_HILT_JETPACK}"
 }

@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     kotlin("android")
     id("kotlin-android-extensions")
+    kotlin("kapt")
 //    id("androidx.navigation.safeargs.kotlin")
 }
 
@@ -77,7 +78,9 @@ dependencies {
     implementation(Libraries.RETROFIT_MOSHI_CONVERTER)
     implementation(Libraries.RETROFIT_COROUTINES_ADAPTER)
     implementation(Libraries.TIMBER)
-    implementation(Libraries.WORK_MANAGER)
+    implementation(Libraries.ROOM_RUNTIME)
+    implementation(Libraries.ROOM_KTX)
+    kapt(Libraries.ROOM_COMPILER)
 
     testImplementation(TestingLib.JUNIT)
     androidTestImplementation(AndroidTestingLib.ANDROIDX_TEST_EXT_JUNIT)

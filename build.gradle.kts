@@ -34,6 +34,7 @@ subprojects {
 
     // Optionally configure plugin
     ktlint {
+        version.set(Versions.KTLINT)
         debug.set(true)
         verbose.set(true)
         android.set(false)
