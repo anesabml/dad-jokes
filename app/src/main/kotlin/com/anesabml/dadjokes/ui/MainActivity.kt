@@ -1,12 +1,12 @@
-package com.anesabml.dadjokes
+package com.anesabml.dadjokes.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.anesabml.dadjokes.R
 import com.anesabml.dadjokes.databinding.ActivityMainBinding
 import com.anesabml.dadjokes.extension.viewBinding
 
