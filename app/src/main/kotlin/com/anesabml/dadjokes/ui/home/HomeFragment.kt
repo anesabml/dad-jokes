@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private val binding: FragmentHomeBinding by viewBinding(FragmentHomeBinding::bind)
-    private lateinit var homeViewModel: HomeViewModel
+    private lateinit var viewModel: HomeViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,24 +37,36 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             appContainer.removeJokeFromFavoriteUseCase
         )
 
-        homeViewModel = ViewModelProvider(this, factory).get(HomeViewModel::class.java)
+        viewModel = ViewModelProvider(this, factory).get(HomeViewModel::class.java)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         setupObservers()
+        setupListeners()
+    }
+
+    private fun setupListeners() {
+        binding.buttonFavorite.setOnClickListener {
+            val tag = it.tag as Boolean
+            if (tag) {
+                viewModel.removeJokeFromFavorite()
+            } else {
+                viewModel.addJokeToFavorite()
+            }
+        }
     }
 
     private fun setupObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
-            homeViewModel.joke.collect {
+            viewModel.joke.collect {
                 updateViewState(it)
             }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            homeViewModel.isFavorite.collect {
+            viewModel.isFavorite.collect {
                 updateFavorite(it)
             }
         }
@@ -68,6 +80,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 val iconResource =
                     if (resources.data) R.drawable.ic_round_favorite else R.drawable.ic_round_favorite_border
                 binding.buttonFavorite.setImageResource(iconResource)
+                binding.buttonFavorite.tag = resources.data
             }
             is Resources.Error -> {
                 binding.progressBar.hide()

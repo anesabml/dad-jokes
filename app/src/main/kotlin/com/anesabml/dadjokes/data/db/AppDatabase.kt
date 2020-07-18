@@ -15,6 +15,7 @@ abstract class AppDatabase : RoomDatabase() {
 
         private const val DATABASE_NAME = "dadJokes.db"
 
+        @Volatile
         private var instance: AppDatabase? = null
 
         private fun create(context: Context): AppDatabase =
@@ -23,6 +24,8 @@ abstract class AppDatabase : RoomDatabase() {
                 .build()
 
         fun getInstance(context: Context): AppDatabase =
-            (instance ?: create(context)).also { instance = it }
+            instance ?: synchronized(this) {
+                (instance ?: create(context)).also { instance = it }
+            }
     }
 }

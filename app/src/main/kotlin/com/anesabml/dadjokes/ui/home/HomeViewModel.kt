@@ -45,24 +45,30 @@ class HomeViewModel(
 
     fun addJokeToFavorite() {
         viewModelScope.launch {
-            if (_joke.value !is Resources.Loading && _joke.value !is Resources.Error) {
-                val joke = _joke as Resources.Success<Joke>
-                addJokeToFavoriteUseCase.invoke(joke.data)
-                    .collect {
-                        _isFavorite.value = it
-                    }
+            when (val joke = _joke.value) {
+                // Only proceed when there is a successful result
+                is Resources.Success -> {
+                    addJokeToFavoriteUseCase.invoke(joke.data)
+                        .collect {
+                            _isFavorite.value = it
+                        }
+                }
+                else -> return@launch
             }
         }
     }
 
     fun removeJokeFromFavorite() {
         viewModelScope.launch {
-            if (_joke.value !is Resources.Loading && _joke.value !is Resources.Error) {
-                val joke = _joke as Resources.Success<Joke>
-                removeJokeFromFavoriteUseCase.invoke(joke.data)
-                    .collect {
-                        _isFavorite.value = it
-                    }
+            when (val joke = _joke.value) {
+                // Only proceed when there is a successful result
+                is Resources.Success -> {
+                    removeJokeFromFavoriteUseCase.invoke(joke.data)
+                        .collect {
+                            _isFavorite.value = it
+                        }
+                }
+                else -> return@launch
             }
         }
     }

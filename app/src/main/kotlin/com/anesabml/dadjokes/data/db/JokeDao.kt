@@ -3,6 +3,7 @@ package com.anesabml.dadjokes.data.db
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.anesabml.dadjokes.data.entity.JokeLocalEntity
 import kotlinx.coroutines.flow.Flow
@@ -10,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface JokeDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(jokeLocalEntity: JokeLocalEntity)
 
     @Delete

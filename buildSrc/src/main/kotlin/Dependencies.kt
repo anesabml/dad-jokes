@@ -23,7 +23,7 @@ object Versions {
     const val JUNIT = "4.13"
     const val KTLINT = "0.37.2"
     const val LIFECYCLE = "2.3.0-alpha02"
-    const val NAVIGATION = "2.3.0-alpha04"
+    const val NAVIGATION = "2.3.0"
     const val OKHTTP = "4.3.1"
     const val RETROFIT = "2.7.1"
     const val RETROFIT_COROUTINES = "0.9.2"
