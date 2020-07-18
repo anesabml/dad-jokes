@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "jokes")
 data class JokeLocalEntity(
     @PrimaryKey(autoGenerate = false)
-    val id: Int,
+    val id: String,
     @ColumnInfo(name = "joke")
     val joke: String,
     @ColumnInfo(name = "status")

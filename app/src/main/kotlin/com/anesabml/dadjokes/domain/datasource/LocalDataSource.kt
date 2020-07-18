@@ -5,9 +5,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface LocalDataSource {
 
-    suspend fun addToFavorite(joke: Joke): Long
+    suspend fun addToFavorite(joke: Joke)
 
-    suspend fun removeFromFavorite(joke: Joke): Long
+    suspend fun removeFromFavorite(joke: Joke)
 
     suspend fun getAllJokes(): Flow<List<Joke>>
 }

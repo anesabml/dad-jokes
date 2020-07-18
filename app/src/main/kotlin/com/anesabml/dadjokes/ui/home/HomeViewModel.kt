@@ -1,5 +1,6 @@
 package com.anesabml.dadjokes.ui.home
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.anesabml.dadjokes.domain.model.Joke
@@ -15,6 +16,7 @@ import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
 class HomeViewModel(
+    private val savedStateHandle: SavedStateHandle,
     private val getRandomJokeUseCase: GetRandomJokeUseCase,
     private val addJokeToFavoriteUseCase: AddJokeToFavoriteUseCase,
     private val removeJokeFromFavoriteUseCase: RemoveJokeFromFavoriteUseCase

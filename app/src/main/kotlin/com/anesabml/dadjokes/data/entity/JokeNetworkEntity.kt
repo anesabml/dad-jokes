@@ -4,7 +4,7 @@ import com.squareup.moshi.Json
 
 data class JokeNetworkEntity(
     @Json(name = "id")
-    val id: Int,
+    val id: String,
     @Json(name = "joke")
     val joke: String,
     @Json(name = "status")

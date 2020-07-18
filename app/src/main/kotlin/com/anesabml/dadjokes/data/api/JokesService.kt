@@ -5,6 +5,6 @@ import retrofit2.http.GET
 
 interface JokesService {
 
-    @GET("")
+    @GET(" ")
     suspend fun getRandomJoke(): JokeNetworkEntity
 }

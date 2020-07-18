@@ -6,6 +6,7 @@ import com.anesabml.dadjokes.utils.Resources
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
+import timber.log.Timber
 
 class AddJokeToFavoriteUseCase(private val localDataSource: LocalDataSource) {
 
@@ -16,6 +17,7 @@ class AddJokeToFavoriteUseCase(private val localDataSource: LocalDataSource) {
             localDataSource.addToFavorite(joke)
             emit(Resources.Success(true))
         }.catch { exception ->
+            Timber.e(exception)
             emit(Resources.Error(exception))
         }
     }

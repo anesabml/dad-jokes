@@ -6,6 +6,7 @@ import com.anesabml.dadjokes.utils.Resources
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
+import timber.log.Timber
 
 class GetRandomJokeUseCase(private val remoteDataSource: RemoteDataSource) {
 
@@ -16,6 +17,7 @@ class GetRandomJokeUseCase(private val remoteDataSource: RemoteDataSource) {
             val joke = remoteDataSource.getRandomJoke()
             emit(Resources.Success(joke))
         }.catch { exception ->
+            Timber.e(exception)
             emit(Resources.Error(exception))
         }
     }

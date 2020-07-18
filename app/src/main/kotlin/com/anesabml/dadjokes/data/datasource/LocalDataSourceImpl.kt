@@ -11,12 +11,12 @@ class LocalDataSourceImpl(
     private val databaseMapper: DatabaseMapper
 ) : LocalDataSource {
 
-    override suspend fun addToFavorite(joke: Joke): Long {
+    override suspend fun addToFavorite(joke: Joke) {
         val jokeLocalEntity = databaseMapper.toEntity(joke)
         return database.jokeDao().insert(jokeLocalEntity)
     }
 
-    override suspend fun removeFromFavorite(joke: Joke): Long {
+    override suspend fun removeFromFavorite(joke: Joke) {
         val jokeLocalEntity = databaseMapper.toEntity(joke)
         return database.jokeDao().delete(jokeLocalEntity)
     }

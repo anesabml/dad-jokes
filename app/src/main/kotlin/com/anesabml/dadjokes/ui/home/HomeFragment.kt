@@ -3,8 +3,9 @@ package com.anesabml.dadjokes.ui.home
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.anesabml.dadjokes.DadJokesApplication
 import com.anesabml.dadjokes.R
 import com.anesabml.dadjokes.databinding.FragmentHomeBinding
 import com.anesabml.dadjokes.domain.model.Joke
@@ -21,7 +22,23 @@ import kotlinx.coroutines.launch
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private val binding: FragmentHomeBinding by viewBinding(FragmentHomeBinding::bind)
-    private val homeViewModel: HomeViewModel by viewModels()
+    private lateinit var homeViewModel: HomeViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val appContainer =
+            (requireContext().applicationContext as DadJokesApplication).appContainer
+
+        val factory = HomeViewModelFactory(
+            this,
+            appContainer.getRandomJokeUseCase,
+            appContainer.addJokeToFavoriteUseCase,
+            appContainer.removeJokeFromFavoriteUseCase
+        )
+
+        homeViewModel = ViewModelProvider(this, factory).get(HomeViewModel::class.java)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
