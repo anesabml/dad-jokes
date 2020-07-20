@@ -4,7 +4,8 @@ import com.anesabml.dadjokes.data.db.AppDatabase
 import com.anesabml.dadjokes.data.mapper.DatabaseMapper
 import com.anesabml.dadjokes.domain.datasource.LocalDataSource
 import com.anesabml.dadjokes.domain.model.Joke
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class LocalDataSourceImpl(
     private val database: AppDatabase,
@@ -22,10 +23,8 @@ class LocalDataSourceImpl(
     }
 
     override suspend fun getAllJokes(): Flow<List<Joke>> {
-        return database.jokeDao().getJokes().flatMapConcat {
-            flow<List<Joke>> {
-                it.map { entity -> databaseMapper.fromEntity(entity) }
-            }
+        return database.jokeDao().getJokes().map {
+            it.map { entity -> databaseMapper.fromEntity(entity) }
         }
     }
 }

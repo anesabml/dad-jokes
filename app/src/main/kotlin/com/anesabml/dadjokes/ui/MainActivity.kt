@@ -9,6 +9,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.anesabml.dadjokes.R
 import com.anesabml.dadjokes.databinding.ActivityMainBinding
 import com.anesabml.dadjokes.extension.viewBinding
+import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
@@ -16,15 +17,16 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(binding.root)
 
         setSupportActionBar(binding.toolbar)
 
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.fragment_home,
+                R.id.fragment_joke,
                 R.id.fragment_favorites
             )
         )

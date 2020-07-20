@@ -8,5 +8,5 @@ fun View.show() {
 }
 
 fun View.hide() {
-    isVisible = true
+    isVisible = false
 }

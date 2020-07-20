@@ -1,5 +1,6 @@
 package com.anesabml.dadjokes.ui.home
 
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -7,7 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.anesabml.dadjokes.DadJokesApplication
 import com.anesabml.dadjokes.R
-import com.anesabml.dadjokes.databinding.FragmentHomeBinding
+import com.anesabml.dadjokes.databinding.FragmentJokeBinding
 import com.anesabml.dadjokes.domain.model.Joke
 import com.anesabml.dadjokes.extension.hide
 import com.anesabml.dadjokes.extension.show
@@ -19,9 +20,9 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
-class HomeFragment : Fragment(R.layout.fragment_home) {
+class JokeFragment : Fragment(R.layout.fragment_joke) {
 
-    private val binding: FragmentHomeBinding by viewBinding(FragmentHomeBinding::bind)
+    private val binding: FragmentJokeBinding by viewBinding(FragmentJokeBinding::bind)
     private lateinit var viewModel: HomeViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,15 +78,21 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             Resources.Loading -> binding.progressBar.show()
             is Resources.Success -> {
                 binding.progressBar.hide()
-                val iconResource =
-                    if (resources.data) R.drawable.ic_round_favorite else R.drawable.ic_round_favorite_border
-                binding.buttonFavorite.setImageResource(iconResource)
-                binding.buttonFavorite.tag = resources.data
+                updateFavoriteImageButton(resources.data)
             }
             is Resources.Error -> {
                 binding.progressBar.hide()
-                Snackbar.make(binding.root, R.string.error_try_again, Snackbar.LENGTH_SHORT).show()
+                showError(getString(R.string.error_try_again))
             }
+        }
+    }
+
+    private fun updateFavoriteImageButton(isFavorite: Boolean) {
+        val iconResource =
+            if (isFavorite) R.drawable.ic_round_favorite else R.drawable.ic_round_favorite_border
+        with(binding.buttonFavorite) {
+            setImageResource(iconResource)
+            tag = isFavorite
         }
     }
 
@@ -94,12 +101,32 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             Resources.Loading -> binding.progressBar.show()
             is Resources.Success -> {
                 binding.progressBar.hide()
-                binding.joke.text = resources.data.joke
+                showJoke(resources.data)
             }
             is Resources.Error -> {
                 binding.progressBar.hide()
-                Snackbar.make(binding.root, R.string.error_try_again, Snackbar.LENGTH_SHORT).show()
+                showError(getString(R.string.error_try_again))
             }
         }
+    }
+
+    private fun showJoke(joke: Joke) {
+        with(binding.joke) {
+            text = joke.joke
+            if (joke.joke.length > 80) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    setTextAppearance(R.style.TextAppearance_MaterialComponents_Headline4)
+                } else {
+                    setTextAppearance(
+                        context,
+                        R.style.TextAppearance_MaterialComponents_Headline4
+                    )
+                }
+            }
+        }
+    }
+
+    private fun showError(string: String) {
+        Snackbar.make(binding.root, string, Snackbar.LENGTH_SHORT).show()
     }
 }

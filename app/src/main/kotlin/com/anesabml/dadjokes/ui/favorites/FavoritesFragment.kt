@@ -14,7 +14,6 @@ import com.anesabml.dadjokes.extension.hide
 import com.anesabml.dadjokes.extension.show
 import com.anesabml.dadjokes.extension.viewBinding
 import com.anesabml.dadjokes.utils.Resources
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -65,15 +64,27 @@ class FavoritesFragment : Fragment(R.layout.fragment_favorites) {
 
     private fun updateViewState(resources: Resources<List<Joke>>) {
         when (resources) {
-            Resources.Loading -> binding.progressBar.show()
+            Resources.Loading -> {
+                binding.progressBar.show()
+                binding.textViewError.hide()
+            }
             is Resources.Success -> {
                 binding.progressBar.hide()
-                favoritesAdapter.submitList(resources.data)
+                if (resources.data.isEmpty()) {
+                    updateErrorTextView(getString(R.string.no_favorites_yet))
+                } else {
+                    favoritesAdapter.submitList(resources.data)
+                }
             }
             is Resources.Error -> {
                 binding.progressBar.hide()
-                Snackbar.make(binding.root, R.string.error_try_again, Snackbar.LENGTH_SHORT).show()
+                updateErrorTextView(resources.exception.message ?: getString(R.string.error_try_again))
             }
         }
+    }
+
+    private fun updateErrorTextView(string: String) {
+        binding.textViewError.show()
+        binding.textViewError.text = string
     }
 }

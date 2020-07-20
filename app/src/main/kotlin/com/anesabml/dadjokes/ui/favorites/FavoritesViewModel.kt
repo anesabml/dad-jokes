@@ -9,8 +9,11 @@ import com.anesabml.dadjokes.utils.Resources
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @ExperimentalCoroutinesApi
 class FavoritesViewModel(
@@ -29,8 +32,16 @@ class FavoritesViewModel(
     fun getFavoriteJokes() {
         viewModelScope.launch {
             getFavoriteJokesUseCase.invoke()
+                .onStart {
+                    _jokes.value = Resources.Loading
+                }
+                .catch { exception ->
+                    Timber.e(exception)
+                    _jokes.value = Resources.Error(exception)
+
+                }
                 .collect {
-                    _jokes.value = it
+                    _jokes.value = Resources.Success(it)
                 }
         }
     }
