@@ -9,7 +9,6 @@ import androidx.navigation.ui.setupWithNavController
 import com.anesabml.dadjokes.R
 import com.anesabml.dadjokes.databinding.ActivityMainBinding
 import com.anesabml.dadjokes.extension.viewBinding
-import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 

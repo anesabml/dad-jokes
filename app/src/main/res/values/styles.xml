@@ -4,8 +4,17 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorPrimaryVariant">@color/primaryDarkColor</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
         <item name="colorSecondary">@color/primaryColor</item>
         <item name="colorSecondaryVariant">@color/primaryDarkColor</item>
+    </style>
+
+    <style name="AppTheme.Toolbar" parent="Widget.MaterialComponents.Toolbar">
+        <item name="titleTextAppearance">@style/AppTheme.Toolbar.TitleTextAppearance</item>
+    </style>
+
+    <style name="AppTheme.Toolbar.TitleTextAppearance" parent="TextAppearance.MaterialComponents.Headline4">
+        <item name="fontWeight">900</item>
     </style>
 
 </resources>

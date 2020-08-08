@@ -38,7 +38,6 @@ class FavoritesViewModel(
                 .catch { exception ->
                     Timber.e(exception)
                     _jokes.value = Resources.Error(exception)
-
                 }
                 .collect {
                     _jokes.value = Resources.Success(it)

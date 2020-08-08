@@ -2,6 +2,11 @@ package com.anesabml.dadjokes.ui.home
 
 import android.os.Build
 import android.os.Bundle
+import android.speech.tts.TextToSpeech
+import android.speech.tts.UtteranceProgressListener
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -12,18 +17,21 @@ import com.anesabml.dadjokes.databinding.FragmentJokeBinding
 import com.anesabml.dadjokes.domain.model.Joke
 import com.anesabml.dadjokes.extension.hide
 import com.anesabml.dadjokes.extension.show
+import com.anesabml.dadjokes.extension.showSnakeBar
 import com.anesabml.dadjokes.extension.viewBinding
 import com.anesabml.dadjokes.utils.Resources
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import timber.log.Timber
+import java.util.Locale
 
 @ExperimentalCoroutinesApi
 class JokeFragment : Fragment(R.layout.fragment_joke) {
 
     private val binding: FragmentJokeBinding by viewBinding(FragmentJokeBinding::bind)
     private lateinit var viewModel: HomeViewModel
+    private lateinit var textToSpeech: TextToSpeech
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,8 +52,28 @@ class JokeFragment : Fragment(R.layout.fragment_joke) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setHasOptionsMenu(true)
+
         setupObservers()
         setupListeners()
+        setupTextToSpeech()
+    }
+
+    private fun setupTextToSpeech() {
+        textToSpeech = TextToSpeech(context) { status ->
+            if (status == TextToSpeech.SUCCESS) {
+                val result = textToSpeech.setLanguage(Locale.UK)
+                if (result == TextToSpeech.LANG_NOT_SUPPORTED or TextToSpeech.LANG_MISSING_DATA) {
+                    binding.root.showSnakeBar(getString(R.string.language_not_supported))
+                } /*else {
+                    textToSpeech.voices.forEach {
+                        Timber.i(it.name)
+                    }
+                }*/
+            } else {
+                binding.root.showSnakeBar(getString(R.string.tts_not_initialized))
+            }
+        }
     }
 
     private fun setupListeners() {
@@ -124,9 +152,68 @@ class JokeFragment : Fragment(R.layout.fragment_joke) {
                 }
             }
         }
+        speakJoke(joke)
     }
 
-    private fun showError(string: String) {
-        Snackbar.make(binding.root, string, Snackbar.LENGTH_SHORT).show()
+    private fun speakJoke(joke: Joke) {
+        val jokeEndings = resources.getStringArray(R.array.joke_endings)
+        with(textToSpeech) {
+            speak(
+                "${joke.joke}, ${jokeEndings.random()}",
+                TextToSpeech.QUEUE_FLUSH,
+                null,
+                joke.id
+            )
+            setOnUtteranceProgressListener(object : UtteranceProgressListener() {
+                override fun onError(utteranceId: String, errorCode: Int) {
+                    super.onError(utteranceId, errorCode)
+                    Timber.e("onError errorCode: $errorCode")
+                    binding.root.showSnakeBar(getString(R.string.error_speaking_joke))
+                }
+
+                override fun onAudioAvailable(utteranceId: String, audio: ByteArray?) {
+                    super.onAudioAvailable(utteranceId, audio)
+                    binding.wave.setRawAudioBytes(audio)
+                }
+
+                override fun onDone(utteranceId: String) {
+                    binding.wave.hide()
+                }
+
+                override fun onStart(utteranceId: String) {
+                    binding.wave.show()
+                }
+
+                override fun onError(utteranceId: String) {
+                    Timber.e("onError utteranceId: $utteranceId")
+                    binding.wave.hide()
+                    binding.root.showSnakeBar(getString(R.string.error_speaking_joke))
+                }
+            })
+        }
+    }
+
+    private fun showError(errorStr: String) {
+        binding.root.showSnakeBar(errorStr)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.main_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_retry -> {
+                viewModel.getRandomJoke()
+                false
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun onDestroy() {
+        textToSpeech.stop()
+        textToSpeech.shutdown()
+        super.onDestroy()
     }
 }

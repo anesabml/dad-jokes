@@ -5,4 +5,14 @@
     <string name="jokes">Jokes</string>
     <string name="error_try_again">Error, Try again!</string>
     <string name="no_favorites_yet">No favorites yet!</string>
+    <string name="language_not_supported">Language not supported</string>
+    <string name="tts_not_initialized">Text To Speech engine not initialized</string>
+    <string name="error_speaking_joke">Could not speak the joke</string>
+
+    <!-- Jokes endings -->
+    <string name="joke_ending_1">Hahahaha hahahahah.</string>
+    <string name="joke_ending_2">Hahahaha what a joke!</string>
+    <string name="joke_ending_3">Hhhhhh Dude you are so funny.</string>
+    <string name="joke_ending_4">Haa haa haa haa bad joke boooooooo.</string>
+    <string name="retry">Retry</string>
 </resources>

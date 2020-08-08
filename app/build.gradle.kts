@@ -82,6 +82,8 @@ dependencies {
     implementation(Libraries.ROOM_KTX)
     kapt(Libraries.ROOM_COMPILER)
 
+    implementation(Libraries.AUDIO_VISUALISER)
+
     testImplementation(TestingLib.JUNIT)
     androidTestImplementation(AndroidTestingLib.ANDROIDX_TEST_EXT_JUNIT)
     androidTestImplementation(AndroidTestingLib.ESPRESSO_CORE)

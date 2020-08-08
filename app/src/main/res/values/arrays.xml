@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="joke_endings">
+        <item>@string/joke_ending_1</item>
+        <item>@string/joke_ending_2</item>
+        <item>@string/joke_ending_3</item>
+        <item>@string/joke_ending_4</item>
+    </string-array>
+</resources>

@@ -34,6 +34,7 @@ object Versions {
     const val MOCKK = "1.10.0"
     const val TRUTH = "1.0.1"
     const val ANDROIDX_ARCH_CORE = "2.1.0"
+    const val AUDIO_VISUALISER = "0.9.2"
 }
 
 object BuildPluginsVersion {
@@ -95,6 +96,9 @@ object Libraries {
     const val TIMBER = "com.jakewharton.timber:timber:${Versions.TIMBER}"
 
     const val CIRCLE_IMAGE_VIEW = "de.hdodenhof:circleimageview:${Versions.CIRCLE_IMAGE}"
+
+    const val AUDIO_VISUALISER =
+        "com.gauravk.audiovisualizer:audiovisualizer:${Versions.AUDIO_VISUALISER}"
 }
 
 object TestingLib {
