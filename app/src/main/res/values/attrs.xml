@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="AudioWave_barHeight" format="dimension" />
+    <attr name="AudioWave_barMinHeight" format="dimension" />
+    <attr name="AudioWave_barWidth" format="dimension" />
+    <attr name="AudioWave_barMargin" format="dimension" />
+    <attr name="AudioWave_barColor" format="color" />
+    <attr name="AudioWave_barCornerRadius" format="dimension" />
+
+    <declare-styleable name="AudioWave">
+        <attr name="AudioWave_barHeight"/>
+        <attr name="AudioWave_barMinHeight"/>
+        <attr name="AudioWave_barWidth"/>
+        <attr name="AudioWave_barMargin"/>
+        <attr name="AudioWave_barColor"/>
+        <attr name="AudioWave_barCornerRadius"/>
+    </declare-styleable>
+</resources>

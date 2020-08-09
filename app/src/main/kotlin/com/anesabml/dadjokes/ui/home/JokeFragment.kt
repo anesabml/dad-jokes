@@ -65,11 +65,8 @@ class JokeFragment : Fragment(R.layout.fragment_joke) {
                 val result = textToSpeech.setLanguage(Locale.UK)
                 if (result == TextToSpeech.LANG_NOT_SUPPORTED or TextToSpeech.LANG_MISSING_DATA) {
                     binding.root.showSnakeBar(getString(R.string.language_not_supported))
-                } /*else {
-                    textToSpeech.voices.forEach {
-                        Timber.i(it.name)
-                    }
-                }*/
+                    binding.fabSpeak.isEnabled = false
+                }
             } else {
                 binding.root.showSnakeBar(getString(R.string.tts_not_initialized))
             }
@@ -83,6 +80,12 @@ class JokeFragment : Fragment(R.layout.fragment_joke) {
                 viewModel.removeJokeFromFavorite()
             } else {
                 viewModel.addJokeToFavorite()
+            }
+        }
+
+        binding.fabSpeak.setOnClickListener {
+            if (::textToSpeech.isInitialized && !textToSpeech.isSpeaking) {
+                speakJoke((viewModel.joke.value as Resources.Success).data)
             }
         }
     }
@@ -171,22 +174,17 @@ class JokeFragment : Fragment(R.layout.fragment_joke) {
                     binding.root.showSnakeBar(getString(R.string.error_speaking_joke))
                 }
 
-                override fun onAudioAvailable(utteranceId: String, audio: ByteArray?) {
+                override fun onAudioAvailable(utteranceId: String, audio: ByteArray) {
                     super.onAudioAvailable(utteranceId, audio)
-                    binding.wave.setRawAudioBytes(audio)
+                    binding.audioWave.rawData = audio
                 }
 
-                override fun onDone(utteranceId: String) {
-                    binding.wave.hide()
-                }
+                override fun onDone(utteranceId: String) {}
 
-                override fun onStart(utteranceId: String) {
-                    binding.wave.show()
-                }
+                override fun onStart(utteranceId: String) {}
 
                 override fun onError(utteranceId: String) {
                     Timber.e("onError utteranceId: $utteranceId")
-                    binding.wave.hide()
                     binding.root.showSnakeBar(getString(R.string.error_speaking_joke))
                 }
             })
