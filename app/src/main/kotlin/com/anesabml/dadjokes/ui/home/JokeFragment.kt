@@ -1,6 +1,5 @@
 package com.anesabml.dadjokes.ui.home
 
-import android.os.Build
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
@@ -8,6 +7,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import androidx.annotation.Dimension
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -74,15 +74,6 @@ class JokeFragment : Fragment(R.layout.fragment_joke) {
     }
 
     private fun setupListeners() {
-        binding.buttonFavorite.setOnClickListener {
-            val tag = it.tag as Boolean
-            if (tag) {
-                viewModel.removeJokeFromFavorite()
-            } else {
-                viewModel.addJokeToFavorite()
-            }
-        }
-
         binding.fabSpeak.setOnClickListener {
             if (::textToSpeech.isInitialized && !textToSpeech.isSpeaking) {
                 speakJoke((viewModel.joke.value as Resources.Success).data)
@@ -109,7 +100,7 @@ class JokeFragment : Fragment(R.layout.fragment_joke) {
             Resources.Loading -> binding.progressBar.show()
             is Resources.Success -> {
                 binding.progressBar.hide()
-                updateFavoriteImageButton(resources.data)
+                updateFavoriteImageButton()
             }
             is Resources.Error -> {
                 binding.progressBar.hide()
@@ -118,13 +109,8 @@ class JokeFragment : Fragment(R.layout.fragment_joke) {
         }
     }
 
-    private fun updateFavoriteImageButton(isFavorite: Boolean) {
-        val iconResource =
-            if (isFavorite) R.drawable.ic_round_favorite else R.drawable.ic_round_favorite_border
-        with(binding.buttonFavorite) {
-            setImageResource(iconResource)
-            tag = isFavorite
-        }
+    private fun updateFavoriteImageButton() {
+        requireActivity().invalidateOptionsMenu()
     }
 
     private fun updateViewState(resources: Resources<Joke>) {
@@ -145,14 +131,7 @@ class JokeFragment : Fragment(R.layout.fragment_joke) {
         with(binding.joke) {
             text = joke.joke
             if (joke.joke.length > 80) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    setTextAppearance(R.style.TextAppearance_MaterialComponents_Headline4)
-                } else {
-                    setTextAppearance(
-                        context,
-                        R.style.TextAppearance_MaterialComponents_Headline4
-                    )
-                }
+                setTextSize(Dimension.SP, 34.0f)
             }
         }
         speakJoke(joke)
@@ -199,13 +178,33 @@ class JokeFragment : Fragment(R.layout.fragment_joke) {
         inflater.inflate(R.menu.main_menu, menu)
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+        val iconResource =
+            if ((viewModel.isFavorite.value as Resources.Success<Boolean>).data) R.drawable.ic_round_favorite else R.drawable.ic_round_favorite_border
+        menu.findItem(R.id.action_favourite).setIcon(iconResource)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_retry -> {
                 viewModel.getRandomJoke()
                 false
             }
+            R.id.action_favourite -> {
+                onClickFavourite(item)
+                false
+            }
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun onClickFavourite(item: MenuItem) {
+        val drawable = item.icon
+        if (drawable == resources.getDrawable(R.drawable.ic_round_favorite, null)) {
+            viewModel.removeJokeFromFavorite()
+        } else {
+            viewModel.addJokeToFavorite()
         }
     }
 

@@ -38,24 +38,11 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:visibility="visible" />
 
-            <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/button_favorite"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:background="@null"
-                android:padding="8dp"
-                android:src="@drawable/ic_round_favorite_border"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
             <TextView
                 android:id="@+id/joke"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:fontFamily="sans-serif-medium"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline3"
@@ -63,13 +50,14 @@
                 app:layout_constraintBottom_toTopOf="@id/audio_wave"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/button_favorite"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:text="Comic sans walks into a bar. The bartener says, we don't serve you're type here!" />
 
             <com.anesabml.dadjokes.ui.views.AudioWave
                 android:id="@+id/audio_wave"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
+                app:AudioWave_barColor="?attr/colorOnPrimary"
                 app:AudioWave_barCornerRadius="4dp"
                 app:AudioWave_barHeight="64dp"
                 app:AudioWave_barMinHeight="4dp"
@@ -86,6 +74,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
+        android:focusable="true"
         android:src="@drawable/ic_round_mic"
         app:layout_constraintBottom_toBottomOf="@+id/cardView"
         app:layout_constraintEnd_toEndOf="@+id/cardView"

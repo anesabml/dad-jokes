@@ -11,6 +11,7 @@ import android.view.View
 import androidx.core.content.withStyledAttributes
 import com.anesabml.dadjokes.R
 import kotlin.math.floor
+import kotlin.random.Random
 
 class AudioWave @JvmOverloads constructor(
     context: Context,
@@ -30,6 +31,7 @@ class AudioWave @JvmOverloads constructor(
 
     private var barPaint = Paint().apply {
         isAntiAlias = true
+        style = Paint.Style.FILL
     }
     private var w: Int = 0
     private var h: Int = 0
@@ -45,6 +47,7 @@ class AudioWave @JvmOverloads constructor(
         get() = _barColor
         set(value) {
             _barColor = value
+            barPaint.color = _barColor
             invalidate()
         }
 
@@ -101,27 +104,27 @@ class AudioWave @JvmOverloads constructor(
 
     init {
         context.withStyledAttributes(attributeSet, R.styleable.AudioWave) {
-            _barColor = getColor(R.styleable.AudioWave_AudioWave_barColor, DEFAULT_BAR_COLOR)
-            _barHeight =
+            barColor = getColor(R.styleable.AudioWave_AudioWave_barColor, DEFAULT_BAR_COLOR)
+            barHeight =
                 getDimensionPixelSize(
                     R.styleable.AudioWave_AudioWave_barHeight,
                     DEFAULT_BAR_HEIGHT
                 )
-            _barMinHeight = getDimensionPixelSize(
+            barMinHeight = getDimensionPixelSize(
                 R.styleable.AudioWave_AudioWave_barMinHeight,
                 DEFAULT_BAR_MIN_HEIGHT
             )
-            _barWidth =
+            barWidth =
                 getDimensionPixelSize(
                     R.styleable.AudioWave_AudioWave_barWidth,
                     DEFAULT_BAR_WIDTH
                 )
-            _barMargin =
+            barMargin =
                 getDimensionPixelSize(
                     R.styleable.AudioWave_AudioWave_barMargin,
                     DEFAULT_BAR_MARGIN
                 )
-            _barCornerRadius =
+            barCornerRadius =
                 getDimensionPixelSize(
                     R.styleable.AudioWave_AudioWave_barCornerRadius,
                     DEFAULT_BAR_CORNER_RADIUS
@@ -171,26 +174,39 @@ class AudioWave @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        with(barPaint) {
-            color = _barColor
-        }
+        if (isInEditMode) {
+            for (i in 0..barsCount) {
+                val heightDiff = Random.nextInt(0, _barHeight)
+                canvas.drawRoundRect(
+                    RectF(
+                        (_barMargin / 2 + i * barStep).toFloat(),
+                        ((centerY / 2 - _barMinHeight - heightDiff).toFloat()),
+                        (_barMargin / 2 + i * barStep + _barWidth).toFloat(),
+                        ((centerY / 2 + _barMinHeight + heightDiff).toFloat())
+                    ),
+                    _barCornerRadius.toFloat(),
+                    _barCornerRadius.toFloat(),
+                    barPaint
+                )
+            }
+        } else {
+            _rawData.forEachIndexed { i, chunk ->
+                val chunkHeight = ((chunk.abs().toFloat() / Byte.MAX_VALUE) * _barHeight).toInt()
+                val clampedHeight = maxOf(chunkHeight, _barMinHeight)
+                val heightDiff = (clampedHeight - _barMinHeight).toFloat()
 
-        _rawData.forEachIndexed { i, chunk ->
-            val chunkHeight = ((chunk.abs().toFloat() / Byte.MAX_VALUE) * _barHeight).toInt()
-            val clampedHeight = maxOf(chunkHeight, _barMinHeight)
-            val heightDiff = (clampedHeight - _barMinHeight).toFloat()
-
-            canvas.drawRoundRect(
-                RectF(
-                    (_barMargin / 2 + i * barStep).toFloat(),
-                    (centerY / 2 - _barMinHeight - heightDiff),
-                    (_barMargin / 2 + i * barStep + _barWidth).toFloat(),
-                    (centerY / 2 + _barMinHeight + heightDiff)
-                ),
-                _barCornerRadius.toFloat(),
-                _barCornerRadius.toFloat(),
-                barPaint
-            )
+                canvas.drawRoundRect(
+                    RectF(
+                        (_barMargin / 2 + i * barStep).toFloat(),
+                        (centerY / 2 - _barMinHeight - heightDiff),
+                        (_barMargin / 2 + i * barStep + _barWidth).toFloat(),
+                        (centerY / 2 + _barMinHeight + heightDiff)
+                    ),
+                    _barCornerRadius.toFloat(),
+                    _barCornerRadius.toFloat(),
+                    barPaint
+                )
+            }
         }
     }
 
@@ -204,7 +220,10 @@ class AudioWave @JvmOverloads constructor(
         var sumPerChunk = 0F
 
         if (targetSize >= data.size) {
-            return data
+            for (i in data.indices) {
+                targetSized[i] = data[i]
+            }
+            return targetSized
         }
 
         for (index in 0..data.size step chunkStep) {
@@ -216,8 +235,8 @@ class AudioWave @JvmOverloads constructor(
             } else {
                 targetSized[prevDataIndex] = (sumPerChunk / sampledPerChunk).toByte()
 
-                sumPerChunk = 0F
-                sampledPerChunk = 0F
+                sumPerChunk = 0.0F
+                sampledPerChunk = 0.0F
                 prevDataIndex = currentDataIndex
             }
         }
