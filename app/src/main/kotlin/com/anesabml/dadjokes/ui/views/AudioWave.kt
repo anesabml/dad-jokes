@@ -1,6 +1,5 @@
 package com.anesabml.dadjokes.ui.views
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
@@ -102,6 +101,8 @@ class AudioWave @JvmOverloads constructor(
     private val centerY: Int
         get() = h / 2
 
+    private lateinit var barsRectArray: Array<RectF>
+
     init {
         context.withStyledAttributes(attributeSet, R.styleable.AudioWave) {
             barColor = getColor(R.styleable.AudioWave_AudioWave_barColor, DEFAULT_BAR_COLOR)
@@ -170,43 +171,51 @@ class AudioWave @JvmOverloads constructor(
         setMeasuredDimension(width, height)
     }
 
-    @SuppressLint("DrawAllocation")
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
         if (isInEditMode) {
-            for (i in 0..barsCount) {
-                val heightDiff = Random.nextInt(0, _barHeight)
-                canvas.drawRoundRect(
-                    RectF(
-                        (_barMargin / 2 + i * barStep).toFloat(),
-                        ((centerY / 2 - _barMinHeight - heightDiff).toFloat()),
-                        (_barMargin / 2 + i * barStep + _barWidth).toFloat(),
-                        ((centerY / 2 + _barMinHeight + heightDiff).toFloat())
-                    ),
-                    _barCornerRadius.toFloat(),
-                    _barCornerRadius.toFloat(),
-                    barPaint
-                )
-            }
+            drawEditMode(canvas)
         } else {
+            if (!::barsRectArray.isInitialized) {
+                barsRectArray = Array(barsCount) {
+                    RectF(0.0f, 0.0f, 0.0f, 0.0f)
+                }
+            }
             _rawData.forEachIndexed { i, chunk ->
                 val chunkHeight = ((chunk.abs().toFloat() / Byte.MAX_VALUE) * _barHeight).toInt()
                 val clampedHeight = maxOf(chunkHeight, _barMinHeight)
                 val heightDiff = (clampedHeight - _barMinHeight).toFloat()
 
                 canvas.drawRoundRect(
-                    RectF(
-                        (_barMargin / 2 + i * barStep).toFloat(),
-                        (centerY / 2 - _barMinHeight - heightDiff),
-                        (_barMargin / 2 + i * barStep + _barWidth).toFloat(),
-                        (centerY / 2 + _barMinHeight + heightDiff)
-                    ),
+                    barsRectArray[i].apply {
+                        left = (_barMargin / 2 + i * barStep).toFloat()
+                        top = (centerY / 2 - _barMinHeight - heightDiff)
+                        right = (_barMargin / 2 + i * barStep + _barWidth).toFloat()
+                        bottom = (centerY / 2 + _barMinHeight + heightDiff)
+                    },
                     _barCornerRadius.toFloat(),
                     _barCornerRadius.toFloat(),
                     barPaint
                 )
             }
+        }
+    }
+
+    private fun drawEditMode(canvas: Canvas) {
+        for (i in 0..barsCount) {
+            val heightDiff = Random.nextInt(0, _barHeight)
+            canvas.drawRoundRect(
+                RectF(
+                    (_barMargin / 2 + i * barStep).toFloat(),
+                    ((centerY / 2 - _barMinHeight - heightDiff).toFloat()),
+                    (_barMargin / 2 + i * barStep + _barWidth).toFloat(),
+                    ((centerY / 2 + _barMinHeight + heightDiff).toFloat())
+                ),
+                _barCornerRadius.toFloat(),
+                _barCornerRadius.toFloat(),
+                barPaint
+            )
         }
     }
 
