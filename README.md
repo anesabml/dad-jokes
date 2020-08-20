@@ -5,8 +5,8 @@ An app that speaks Dad jokes, you can save your favorite to tell it to your frie
 ## Screenshots
 
 <div style="text-align:center">
-    <img src="metadata/screenshots/dad_jokes_dark.png"/>
-    <img src="metadata/screenshots/dad_jokes_light.png"/>
+    <img src="metadata/screenshots/dark.png"/>
+    <img src="metadata/screenshots/light.png"/>
 </div>
 
 ## Motivation
@@ -27,16 +27,15 @@ The focus of this project is to learn how to create custom views, also how to in
 - [**ViewModel**](https://developer.android.com/topic/libraries/architecture)
 - [**WorkManager**](https://developer.android.com/topic/libraries/architecture)
 
-## Gradle Setup
+## Gradle
 
-The project is using [**Gradle Kotlin DSL**](https://docs.gradle.org/current/userguide/kotlin_dsl.html)
-Dependencies are centralized inside the [Dependencies.kt](buildSrc/src/main/kotlin/Dependencies.kt) file in the `buildSrc` folder.
+- [**Gradle Kotlin DSL**](https://docs.gradle.org/current/userguide/kotlin_dsl.html)
 
 ## Static Analysis
 
-The project uses [**ktlint**](https://github.com/pinterest/ktlint) with the [ktlint-gradle](https://github.com/jlleitschuh/ktlint-gradle) plugin to format your code.
+- [**ktlint**](https://github.com/pinterest/ktlint) with the [ktlint-gradle](https://github.com/jlleitschuh/ktlint-gradle).
 
-The project uses [**dteckt**](https://github.com/pinterest/ktlint) with the [ktlint-gradle](https://github.com/jlleitschuh/ktlint-gradle) plugin to format your code.
+- [**detekt**](https://github.com/detekt/detekt).
 
 ## CI
 
@@ -44,6 +43,6 @@ Workflow available:
 
 - [Build and check](.github/workflows/build-and-check.yaml) - Will run the `build` and `check` task.
 
-## Contributing 🤝
+## Contributing
 
 Feel free to open a issue or submit a pull request for any bugs/improvements.
