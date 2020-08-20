@@ -89,7 +89,7 @@ class AudioWave @JvmOverloads constructor(
     var rawData
         get() = _rawData
         set(value) {
-            _rawData = downSample(value, barsCount + 1)
+            _rawData = downSample(value, barsCount)
             invalidate()
         }
 
@@ -174,7 +174,7 @@ class AudioWave @JvmOverloads constructor(
             drawEditMode(canvas)
         } else {
             if (!::barsRectArray.isInitialized) {
-                barsRectArray = Array(barsCount + 1) {
+                barsRectArray = Array(barsCount) {
                     RectF(0F, 0F, 0F, 0F)
                 }
             }

@@ -60,6 +60,9 @@
                 android:layout_height="120dp"
                 android:layout_marginBottom="32dp"
                 app:AudioWave_barColor="?attr/colorOnPrimary"
+                app:AudioWave_barHeight="48dp"
+                app:AudioWave_barWidth="10dp"
+                app:AudioWave_barMargin="2dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />

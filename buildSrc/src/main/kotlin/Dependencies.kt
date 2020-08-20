@@ -38,7 +38,6 @@ object BuildPluginsVersion {
     const val AGP = "4.0.1"
     const val KOTLIN = "1.3.72"
     const val KTLINT = "9.3.0"
-    const val DETEKT = "1.10.0"
 }
 
 object SupportLibs {

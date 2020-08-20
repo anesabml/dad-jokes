@@ -19,7 +19,6 @@ The focus of this project is to learn how to create custom views, also how to in
 - [**Lifecycle**](https://developer.android.com/topic/libraries/architecture)
 - [**LiveData**](https://developer.android.com/topic/libraries/architecture)
 - [**Moshi**](https://github.com/square/moshi/)
-- [**mockk**](https://github.com/mockk/mockk)
 - [**Retrofit**](https://github.com/square/retrofit)
 - [**Room**](https://developer.android.com/topic/libraries/architecture)
 - [**Timber**](https://github.com/JakeWharton/timber)
@@ -35,14 +34,6 @@ The focus of this project is to learn how to create custom views, also how to in
 
 - [**ktlint**](https://github.com/pinterest/ktlint) with the [ktlint-gradle](https://github.com/jlleitschuh/ktlint-gradle).
 
-- [**detekt**](https://github.com/detekt/detekt).
-
 ## CI
 
-Workflow available:
-
 - [Build and check](.github/workflows/build-and-check.yaml) - Will run the `build` and `check` task.
-
-## Contributing
-
-Feel free to open a issue or submit a pull request for any bugs/improvements.
