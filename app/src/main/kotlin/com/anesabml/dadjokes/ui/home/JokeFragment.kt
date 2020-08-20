@@ -11,7 +11,6 @@ import androidx.annotation.Dimension
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.anesabml.dadjokes.DadJokesApplication
 import com.anesabml.dadjokes.R
 import com.anesabml.dadjokes.databinding.FragmentJokeBinding
 import com.anesabml.dadjokes.domain.model.Joke
@@ -20,6 +19,7 @@ import com.anesabml.dadjokes.extension.show
 import com.anesabml.dadjokes.extension.showSnakeBar
 import com.anesabml.dadjokes.extension.viewBinding
 import com.anesabml.dadjokes.utils.Resources
+import com.anesabml.dadjokes.viewModelFactoryGraph
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -36,17 +36,10 @@ class JokeFragment : Fragment(R.layout.fragment_joke) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val appContainer =
-            (requireContext().applicationContext as DadJokesApplication).appContainer
+        val viewModelFactory =
+            requireContext().viewModelFactoryGraph().getHomeViewModelFactory()
 
-        val factory = HomeViewModelFactory(
-            this,
-            appContainer.getRandomJokeUseCase,
-            appContainer.addJokeToFavoriteUseCase,
-            appContainer.removeJokeFromFavoriteUseCase
-        )
-
-        viewModel = ViewModelProvider(this, factory).get(HomeViewModel::class.java)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(HomeViewModel::class.java)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -130,7 +123,7 @@ class JokeFragment : Fragment(R.layout.fragment_joke) {
     private fun showJoke(joke: Joke) {
         with(binding.joke) {
             text = joke.joke
-            if (joke.joke.length > 80) {
+            if (joke.joke.length > 100) {
                 setTextSize(Dimension.SP, 34.0f)
             }
         }

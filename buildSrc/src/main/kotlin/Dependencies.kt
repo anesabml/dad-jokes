@@ -91,8 +91,6 @@ object Libraries {
         "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:${Versions.RETROFIT_COROUTINES}"
 
     const val TIMBER = "com.jakewharton.timber:timber:${Versions.TIMBER}"
-
-    const val CIRCLE_IMAGE_VIEW = "de.hdodenhof:circleimageview:${Versions.CIRCLE_IMAGE}"
 }
 
 object TestingLib {

@@ -18,7 +18,6 @@ class FavoritesViewModelFactory(
         handle: SavedStateHandle
     ): T {
         return FavoritesViewModel(
-            handle,
             getFavoriteJokesUseCase
         ) as T
     }

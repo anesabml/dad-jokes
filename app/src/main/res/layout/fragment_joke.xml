@@ -11,7 +11,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="64dp"
         app:cardCornerRadius="@dimen/corner_radius"
@@ -51,17 +51,15 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.4"
                 tools:text="Comic sans walks into a bar. The bartener says, we don't serve you're type here!" />
 
             <com.anesabml.dadjokes.ui.views.AudioWave
                 android:id="@+id/audio_wave"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
+                android:layout_marginBottom="32dp"
                 app:AudioWave_barColor="?attr/colorOnPrimary"
-                app:AudioWave_barCornerRadius="4dp"
-                app:AudioWave_barHeight="64dp"
-                app:AudioWave_barMinHeight="4dp"
-                app:AudioWave_barWidth="4dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />

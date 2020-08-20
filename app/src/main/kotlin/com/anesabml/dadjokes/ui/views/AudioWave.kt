@@ -9,6 +9,7 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.withStyledAttributes
 import com.anesabml.dadjokes.R
+import com.anesabml.dadjokes.extension.convertDpToPixel
 import kotlin.math.floor
 import kotlin.random.Random
 
@@ -22,9 +23,9 @@ class AudioWave @JvmOverloads constructor(
     companion object {
         private const val DEFAULT_BAR_COLOR = Color.WHITE
         private const val DEFAULT_BAR_MIN_HEIGHT = 4
-        private const val DEFAULT_BAR_HEIGHT = 24
-        private const val DEFAULT_BAR_WIDTH = 4
-        private const val DEFAULT_BAR_MARGIN = 1
+        private const val DEFAULT_BAR_HEIGHT = 48
+        private const val DEFAULT_BAR_WIDTH = 24
+        private const val DEFAULT_BAR_MARGIN = 2
         private const val DEFAULT_BAR_CORNER_RADIUS = 4
     }
 
@@ -32,14 +33,14 @@ class AudioWave @JvmOverloads constructor(
         isAntiAlias = true
         style = Paint.Style.FILL
     }
-    private var w: Int = 0
-    private var h: Int = 0
+    private var _width: Int = 0
+    private var _height: Int = 0
     private var _barColor = DEFAULT_BAR_COLOR
-    private var _barHeight = dip(DEFAULT_BAR_HEIGHT)
-    private var _barMinHeight = dip(DEFAULT_BAR_MIN_HEIGHT)
-    private var _barWidth = dip(DEFAULT_BAR_WIDTH)
-    private var _barMargin = dip(DEFAULT_BAR_MARGIN)
-    private var _barCornerRadius = dip(DEFAULT_BAR_CORNER_RADIUS)
+    private var _barHeight = convertDpToPixel(DEFAULT_BAR_HEIGHT)
+    private var _barMinHeight = convertDpToPixel(DEFAULT_BAR_MIN_HEIGHT)
+    private var _barWidth = convertDpToPixel(DEFAULT_BAR_WIDTH)
+    private var _barMargin = convertDpToPixel(DEFAULT_BAR_MARGIN)
+    private var _barCornerRadius = convertDpToPixel(DEFAULT_BAR_CORNER_RADIUS)
     private var _rawData = byteArrayOf()
 
     var barColor
@@ -88,7 +89,7 @@ class AudioWave @JvmOverloads constructor(
     var rawData
         get() = _rawData
         set(value) {
-            _rawData = downSample(value, barsCount)
+            _rawData = downSample(value, barsCount + 1)
             invalidate()
         }
 
@@ -96,10 +97,7 @@ class AudioWave @JvmOverloads constructor(
         get() = _barMargin + _barWidth
 
     private val barsCount: Int
-        get() = w / barStep
-
-    private val centerY: Int
-        get() = h / 2
+        get() = _width / barStep
 
     private lateinit var barsRectArray: Array<RectF>
 
@@ -134,8 +132,8 @@ class AudioWave @JvmOverloads constructor(
     }
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
-        w = right - left
-        h = bottom - top
+        _width = right - left
+        _height = bottom - top
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -149,8 +147,6 @@ class AudioWave @JvmOverloads constructor(
         if (widthMode == MeasureSpec.EXACTLY) {
             width = widthSize
         } else {
-            // todo measure the view width = ??
-
             width = maxOf(width, suggestedMinimumWidth)
             if (widthMode == MeasureSpec.AT_MOST) {
                 width = minOf(widthSize, width)
@@ -178,21 +174,21 @@ class AudioWave @JvmOverloads constructor(
             drawEditMode(canvas)
         } else {
             if (!::barsRectArray.isInitialized) {
-                barsRectArray = Array(barsCount) {
-                    RectF(0.0f, 0.0f, 0.0f, 0.0f)
+                barsRectArray = Array(barsCount + 1) {
+                    RectF(0F, 0F, 0F, 0F)
                 }
             }
             _rawData.forEachIndexed { i, chunk ->
-                val chunkHeight = ((chunk.abs().toFloat() / Byte.MAX_VALUE) * _barHeight).toInt()
-                val clampedHeight = maxOf(chunkHeight, _barMinHeight)
-                val heightDiff = (clampedHeight - _barMinHeight).toFloat()
+                val chunkHeight =
+                    (chunk.abs().toFloat() / Byte.MAX_VALUE * _barHeight)
+                val clampedHeight = maxOf(chunkHeight, _barMinHeight.toFloat())
 
                 canvas.drawRoundRect(
                     barsRectArray[i].apply {
                         left = (_barMargin / 2 + i * barStep).toFloat()
-                        top = (centerY / 2 - _barMinHeight - heightDiff)
+                        top = (_height - _barMinHeight - clampedHeight)
                         right = (_barMargin / 2 + i * barStep + _barWidth).toFloat()
-                        bottom = (centerY / 2 + _barMinHeight + heightDiff)
+                        bottom = _height.toFloat()
                     },
                     _barCornerRadius.toFloat(),
                     _barCornerRadius.toFloat(),
@@ -204,13 +200,13 @@ class AudioWave @JvmOverloads constructor(
 
     private fun drawEditMode(canvas: Canvas) {
         for (i in 0..barsCount) {
-            val heightDiff = Random.nextInt(0, _barHeight)
+            val clampedHeight = Random.nextInt(0, _barHeight)
             canvas.drawRoundRect(
                 RectF(
                     (_barMargin / 2 + i * barStep).toFloat(),
-                    ((centerY / 2 - _barMinHeight - heightDiff).toFloat()),
+                    (_height - _barMinHeight - clampedHeight).toFloat(),
                     (_barMargin / 2 + i * barStep + _barWidth).toFloat(),
-                    ((centerY / 2 + _barMinHeight + heightDiff).toFloat())
+                    _height.toFloat()
                 ),
                 _barCornerRadius.toFloat(),
                 _barCornerRadius.toFloat(),
@@ -242,10 +238,10 @@ class AudioWave @JvmOverloads constructor(
                 sampledPerChunk += 1
                 sumPerChunk += data[index].abs()
             } else {
-                targetSized[prevDataIndex] = (sumPerChunk / sampledPerChunk).toByte()
+                targetSized[prevDataIndex] = (sumPerChunk / sampledPerChunk).toInt().toByte()
 
-                sumPerChunk = 0.0F
-                sampledPerChunk = 0.0F
+                sumPerChunk = 0F
+                sampledPerChunk = 0F
                 prevDataIndex = currentDataIndex
             }
         }
@@ -261,5 +257,3 @@ fun Byte.abs(): Byte {
         else -> this
     }
 }
-
-fun View.dip(value: Int): Int = (value * resources.displayMetrics.density).toInt()

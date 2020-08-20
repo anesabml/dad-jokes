@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.anesabml.dadjokes.DadJokesApplication
 import com.anesabml.dadjokes.R
 import com.anesabml.dadjokes.databinding.FragmentFavoritesBinding
 import com.anesabml.dadjokes.domain.model.Joke
@@ -14,6 +13,7 @@ import com.anesabml.dadjokes.extension.hide
 import com.anesabml.dadjokes.extension.show
 import com.anesabml.dadjokes.extension.viewBinding
 import com.anesabml.dadjokes.utils.Resources
+import com.anesabml.dadjokes.viewModelFactoryGraph
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -28,15 +28,10 @@ class FavoritesFragment : Fragment(R.layout.fragment_favorites) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val appContainer =
-            (requireContext().applicationContext as DadJokesApplication).appContainer
+        val viewModelFactory =
+            requireContext().viewModelFactoryGraph().getFavoritesViewModelFactory()
 
-        val factory = FavoritesViewModelFactory(
-            this,
-            appContainer.getFavoriteJokesUseCase
-        )
-
-        viewModel = ViewModelProvider(this, factory).get(FavoritesViewModel::class.java)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(FavoritesViewModel::class.java)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -78,7 +73,9 @@ class FavoritesFragment : Fragment(R.layout.fragment_favorites) {
             }
             is Resources.Error -> {
                 binding.progressBar.hide()
-                updateErrorTextView(resources.exception.message ?: getString(R.string.error_try_again))
+                updateErrorTextView(
+                    resources.exception.message ?: getString(R.string.error_try_again)
+                )
             }
         }
     }

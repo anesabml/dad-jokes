@@ -22,7 +22,6 @@ class HomeViewModelFactory(
         handle: SavedStateHandle
     ): T {
         return HomeViewModel(
-            handle,
             getRandomJokeUseCase,
             addJokeToFavoriteUseCase,
             removeJokeFromFavoriteUseCase

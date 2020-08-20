@@ -64,7 +64,6 @@ dependencies {
     implementation(SupportLibs.BROWSER)
     implementation(Libraries.MATERIAL)
     implementation(Libraries.COIL)
-    implementation(Libraries.CIRCLE_IMAGE_VIEW)
     implementation(Libraries.NAVIGATION_FRAGMENT)
     implementation(Libraries.NAVIGATION_UI)
     implementation(Libraries.LIFECYCLE_LIVEDATA)

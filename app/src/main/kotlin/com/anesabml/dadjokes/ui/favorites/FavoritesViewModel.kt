@@ -1,6 +1,5 @@
 package com.anesabml.dadjokes.ui.favorites
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.anesabml.dadjokes.domain.model.Joke
@@ -17,7 +16,6 @@ import timber.log.Timber
 
 @ExperimentalCoroutinesApi
 class FavoritesViewModel(
-    private val savedStateHandle: SavedStateHandle,
     private val getFavoriteJokesUseCase: GetFavoriteJokesUseCase
 ) : ViewModel() {
 
